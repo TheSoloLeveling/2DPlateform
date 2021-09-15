@@ -5,6 +5,9 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     private Rigidbody2D rb;
+    private PlayerAnimation anim;
+    private SpriteRenderer sr;
+
     [SerializeField]
     private float jump = 5.0f;
     [SerializeField]
@@ -14,7 +17,9 @@ public class Player : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        anim = GetComponent<PlayerAnimation>();
         rb = GetComponent<Rigidbody2D>();
+        sr = GetComponentInChildren<SpriteRenderer>();
     }
 
     // Update is called once per frame
@@ -29,6 +34,11 @@ public class Player : MonoBehaviour
     {
         float moveH = Input.GetAxisRaw("Horizontal");
 
+        if (moveH < 0)
+            sr.flipX = true;
+        else if (moveH > 0)
+            sr.flipX = false;
+
         if (Input.GetKeyDown(KeyCode.Space) && CheckGrounded())
         {
             rb.velocity = new Vector2(rb.velocity.x, jump);
@@ -37,6 +47,7 @@ public class Player : MonoBehaviour
         }
 
         rb.velocity = new Vector2(moveH * speed, rb.velocity.y);
+        anim.Move(moveH);
     }
 
     bool CheckGrounded()
