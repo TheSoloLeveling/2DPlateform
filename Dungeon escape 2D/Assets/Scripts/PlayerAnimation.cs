@@ -20,6 +20,11 @@ public class PlayerAnimation : MonoBehaviour
         }
     }
 
+    public void Jump(bool jumping)
+    {
+        anim.SetBool("Jumping", jumping);
+    }
+
     // Update is called once per frame
     void Update()
     {

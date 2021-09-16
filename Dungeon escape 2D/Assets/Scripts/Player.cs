@@ -42,8 +42,9 @@ public class Player : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space) && CheckGrounded())
         {
             rb.velocity = new Vector2(rb.velocity.x, jump);
- 
+            
             StartCoroutine(ResetJumpRoutine());
+            anim.Jump(true);
         }
 
         rb.velocity = new Vector2(moveH * speed, rb.velocity.y);
@@ -52,12 +53,17 @@ public class Player : MonoBehaviour
 
     bool CheckGrounded()
     {
-        RaycastHit2D hitInfo = Physics2D.Raycast(transform.position, Vector2.down, 0.6f, 1 << 6);
+        RaycastHit2D hitInfo = Physics2D.Raycast(transform.position, Vector2.down, 1f, 1 << 6);
+        Debug.DrawRay(transform.position, Vector2.down, Color.red);
 
         if (hitInfo.collider != null)
         {
             if (!resetJump)
+            {
+                anim.Jump(false);
                 return true;
+            }
+                
         }
 
         return false;
