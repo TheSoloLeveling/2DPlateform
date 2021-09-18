@@ -5,8 +5,9 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     private Rigidbody2D rb;
-    private PlayerAnimation anim;
-    private SpriteRenderer sr;
+    private PlayerAnimation playerAnim;
+    private SpriteRenderer playerSr;
+    private SpriteRenderer swordSr;
 
     [SerializeField]
     private float jump = 5.0f;
@@ -17,9 +18,10 @@ public class Player : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        anim = GetComponent<PlayerAnimation>();
+        playerAnim = GetComponent<PlayerAnimation>();
         rb = GetComponent<Rigidbody2D>();
-        sr = GetComponentInChildren<SpriteRenderer>();
+        playerSr = GetComponentsInChildren<SpriteRenderer>()[0];
+        swordSr = GetComponentsInChildren<SpriteRenderer>()[1];
     }
 
     // Update is called once per frame
@@ -28,6 +30,24 @@ public class Player : MonoBehaviour
         Movement();
         CheckGrounded();
         
+        if (Input.GetKeyDown(KeyCode.Mouse0) && CheckGrounded())
+        {
+            float moveH = Input.GetAxisRaw("Horizontal");
+            Vector3 swordPosition = GetComponentsInChildren<Transform>()[1].position;
+            if (moveH < 0)
+            {
+                swordSr.flipX = true;
+                swordSr.flipY = true;
+                GetComponentsInChildren<Transform>()[1].position.Set(-swordPosition.x, swordPosition.y, swordPosition.z);
+            }
+            else if (moveH > 0)
+            {
+                swordSr.flipX = false;
+                swordSr.flipY = false;
+                GetComponentsInChildren<Transform>()[1].position.Set(-swordPosition.x, swordPosition.y, swordPosition.z);
+            }
+            playerAnim.Attack();
+        }
     } 
 
     void Movement()
@@ -35,20 +55,20 @@ public class Player : MonoBehaviour
         float moveH = Input.GetAxisRaw("Horizontal");
 
         if (moveH < 0)
-            sr.flipX = true;
+            playerSr.flipX = true;
         else if (moveH > 0)
-            sr.flipX = false;
+            playerSr.flipX = false;
 
         if (Input.GetKeyDown(KeyCode.Space) && CheckGrounded())
         {
             rb.velocity = new Vector2(rb.velocity.x, jump);
-            
+           
             StartCoroutine(ResetJumpRoutine());
-            anim.Jump(true);
+            playerAnim.Jump(true);
         }
 
         rb.velocity = new Vector2(moveH * speed, rb.velocity.y);
-        anim.Move(moveH);
+        playerAnim.Move(moveH);
     }
 
     bool CheckGrounded()
@@ -60,7 +80,7 @@ public class Player : MonoBehaviour
         {
             if (!resetJump)
             {
-                anim.Jump(false);
+                playerAnim.Jump(false);
                 return true;
             }
                 
