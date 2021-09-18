@@ -21,7 +21,8 @@ public class Player : MonoBehaviour
         playerAnim = GetComponent<PlayerAnimation>();
         rb = GetComponent<Rigidbody2D>();
         playerSr = GetComponentsInChildren<SpriteRenderer>()[0];
-        swordSr = GetComponentsInChildren<SpriteRenderer>()[1];
+        swordSr = transform.GetChild(1).GetComponent<SpriteRenderer>();
+        
     }
 
     // Update is called once per frame
@@ -33,18 +34,24 @@ public class Player : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Mouse0) && CheckGrounded())
         {
             float moveH = Input.GetAxisRaw("Horizontal");
-            Vector3 swordPosition = GetComponentsInChildren<Transform>()[1].position;
-            if (moveH < 0)
+            
+            if (playerSr.flipX)
             {
                 swordSr.flipX = true;
                 swordSr.flipY = true;
-                GetComponentsInChildren<Transform>()[1].position.Set(-swordPosition.x, swordPosition.y, swordPosition.z);
+
+                Vector3 pos = swordSr.transform.localPosition;
+                pos.x = -1.0f;
+                swordSr.transform.localPosition = pos;
             }
-            else if (moveH > 0)
+            else if (!playerSr.flipX)
             {
                 swordSr.flipX = false;
                 swordSr.flipY = false;
-                GetComponentsInChildren<Transform>()[1].position.Set(-swordPosition.x, swordPosition.y, swordPosition.z);
+
+                Vector3 pos = swordSr.transform.localPosition;
+                pos.x = 1.0f;
+                swordSr.transform.localPosition = pos;
             }
             playerAnim.Attack();
         }
