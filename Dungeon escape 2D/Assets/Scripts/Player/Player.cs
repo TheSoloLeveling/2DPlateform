@@ -52,6 +52,7 @@ public class Player : MonoBehaviour
                 Vector3 pos = swordSr.transform.localPosition;
                 pos.x = 1.0f;
                 swordSr.transform.localPosition = pos;
+                
             }
             playerAnim.Attack();
         }
