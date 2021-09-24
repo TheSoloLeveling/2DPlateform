@@ -21,17 +21,23 @@ public class MossGiant : Enemy
 
     public override void Update()
     {
+        if (currentTarget == pointA.position)
+        {
+            sr.flipX = true;
+        }
+        else if (currentTarget == pointB.position)
+        {
+            sr.flipX = false;
+        }
 
         if (transform.position == pointA.position) 
         {
             anim.SetTrigger("Idle");
-            sr.flipX = false;
             currentTarget = pointB.position;
         }
         else if (transform.position == pointB.position)
         {
             anim.SetTrigger("Idle");
-            sr.flipX = true;
             currentTarget = pointA.position;
         }
 
