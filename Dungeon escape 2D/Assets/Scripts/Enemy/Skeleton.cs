@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MossGiant : Enemy
+public class Skeleton : Enemy
 {
     //Initialisation
     public override void Init()
