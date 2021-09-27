@@ -17,6 +17,8 @@ public abstract class Enemy : MonoBehaviour
     protected Animator anim;
     protected SpriteRenderer sr;
 
+    protected bool isHit;
+
     public virtual void Init()
     {
         currentTarget = Vector3.zero;
@@ -55,7 +57,7 @@ public abstract class Enemy : MonoBehaviour
             currentTarget = pointA.position;
         }
 
-        if (!anim.GetCurrentAnimatorStateInfo(0).IsName("Idle"))
+        if (!anim.GetCurrentAnimatorStateInfo(0).IsName("Idle") && !isHit)
         {
             transform.position = Vector3.MoveTowards(transform.position, currentTarget, speed * Time.deltaTime);
         }
