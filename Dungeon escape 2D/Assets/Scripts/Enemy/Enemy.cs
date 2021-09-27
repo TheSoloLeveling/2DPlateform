@@ -16,6 +16,7 @@ public abstract class Enemy : MonoBehaviour
     protected Vector3 currentTarget;
     protected Animator anim;
     protected SpriteRenderer sr;
+    protected Player player;
 
     protected bool isHit;
 
@@ -24,6 +25,8 @@ public abstract class Enemy : MonoBehaviour
         currentTarget = Vector3.zero;
         anim = GetComponentInChildren<Animator>();
         sr = GetComponentInChildren<SpriteRenderer>();
+        player = FindObjectOfType<Player>();
+ 
     }
     public void Start()
     {
@@ -60,6 +63,15 @@ public abstract class Enemy : MonoBehaviour
         if (!anim.GetCurrentAnimatorStateInfo(0).IsName("Idle") && !isHit)
         {
             transform.position = Vector3.MoveTowards(transform.position, currentTarget, speed * Time.deltaTime);
+        }
+
+        float distance = Mathf.Abs(player.GetComponent<Transform>().position.x - transform.position.x);
+        
+        if (distance > 2.0f)
+        {
+            Debug.Log(distance);
+            isHit = false;
+            anim.SetBool("InCombat", false);
         }
     }
  
