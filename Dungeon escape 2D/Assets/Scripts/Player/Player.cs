@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Player : MonoBehaviour
+public class Player : MonoBehaviour, IDamageable
 {
     private Rigidbody2D rb;
     private PlayerAnimation playerAnim;
@@ -13,7 +13,13 @@ public class Player : MonoBehaviour
     private float jump = 5.0f;
     [SerializeField]
     private float speed = 3.0f;
+    [SerializeField]
+    private int health = 3;
+
     private bool resetJump = false;
+
+    public int Health { get; set; }
+
 
     // Start is called before the first frame update
     void Start()
@@ -22,7 +28,9 @@ public class Player : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         playerSr = GetComponentsInChildren<SpriteRenderer>()[0];
         swordSr = transform.GetChild(1).GetComponent<SpriteRenderer>();
-        
+
+        Health = health;
+
     }
 
     // Update is called once per frame
@@ -96,6 +104,20 @@ public class Player : MonoBehaviour
 
         return false;
     }
+
+    public void damage()
+    {
+        Debug.Log("enemy Hit");
+
+        Health--;
+        
+        if (Health < 1)
+        {
+            Destroy(gameObject);
+        }
+
+    }
+
 
     IEnumerator ResetJumpRoutine()
     {

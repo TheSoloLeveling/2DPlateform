@@ -18,7 +18,7 @@ public abstract class Enemy : MonoBehaviour
     protected SpriteRenderer sr;
     protected Player player;
 
-    protected bool isHit;
+    protected bool isHit = false;
 
     public virtual void Init()
     {
@@ -60,19 +60,22 @@ public abstract class Enemy : MonoBehaviour
             currentTarget = pointA.position;
         }
 
-        if (!anim.GetCurrentAnimatorStateInfo(0).IsName("Idle") && !isHit)
+        if (!anim.GetCurrentAnimatorStateInfo(0).IsName("Idle") && !isHit && !anim.GetBool("InCombat"))
         {
             transform.position = Vector3.MoveTowards(transform.position, currentTarget, speed * Time.deltaTime);
         }
 
-        float distance = Mathf.Abs(player.GetComponent<Transform>().position.x - transform.position.x);
+        float distance = Vector3.Distance(player.transform.localPosition, transform.localPosition);
         
         if (distance > 2.0f)
         {
-            Debug.Log(distance);
             isHit = false;
             anim.SetBool("InCombat", false);
         }
+        /*else if(distance < 2.0f)
+        {
+            anim.SetBool("InCombat", true);
+        }*/
     }
  
 }
