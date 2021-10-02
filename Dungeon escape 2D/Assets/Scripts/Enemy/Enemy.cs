@@ -72,10 +72,16 @@ public abstract class Enemy : MonoBehaviour
             isHit = false;
             anim.SetBool("InCombat", false);
         }
-        /*else if(distance < 2.0f)
+
+        Vector3 direction = transform.localPosition - player.transform.localPosition;
+
+        if (anim.GetBool("InCombat"))
         {
-            anim.SetBool("InCombat", true);
-        }*/
+            if (direction.x < 0)
+                sr.flipX = false;
+            else if (direction.x > 0)
+                sr.flipX = true;
+        }
     }
  
 }
